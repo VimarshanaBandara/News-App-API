@@ -4,6 +4,8 @@ import 'package:news_app/helper/data.dart';
 import 'package:news_app/helper/news.dart';
 import 'package:news_app/models/article_model.dart';
 import 'package:news_app/models/category_model.dart';
+import 'package:news_app/views/article_view.dart';
+import 'package:news_app/views/category_news.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -85,6 +87,7 @@ class _HomePageState extends State<HomePage> {
                         imageUrl:articles[index].urlToImage,
                         title: articles[index].title,
                         description: articles[index].description,
+                        url: articles[index].url,
                       );
                     }
 
@@ -99,14 +102,18 @@ class _HomePageState extends State<HomePage> {
 }
 
 class CategoryCard extends StatelessWidget {
-  final imageUrl;
-  final categoryName;
+  final String imageUrl;
+  final String categoryName;
   CategoryCard({this.imageUrl , this.categoryName});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
 
-      onTap: (){},
+      onTap: (){
+        Navigator.push(context,MaterialPageRoute(builder: (context)=>CategoryNews(
+          category: categoryName.toString().toLowerCase(),
+        )));
+      },
 
       child:  Container(
         margin: EdgeInsets.only(right: 16.0),
@@ -137,25 +144,33 @@ class CategoryCard extends StatelessWidget {
 
 class BlogCard extends StatelessWidget {
 
-  final String imageUrl , title , description;
-  BlogCard({@required this.imageUrl ,@required this.title ,@required this.description});
+  final String imageUrl , title , description , url;
+  BlogCard({@required this.imageUrl ,@required this.title ,@required this.description, @required this.url});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 16.0),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(6.0),
-            child: Image.network(imageUrl),
-          ),
-          SizedBox(height: 8.0,),
-          Text(title,style: TextStyle(fontSize: 18.0,color: Colors.black87,fontWeight: FontWeight.w600),),
-          SizedBox(height: 8.0,),
-          Text(description,style: TextStyle(color: Colors.black54),),
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ArticleView(
+         blogUrl: url,
+        )));
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 16.0),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6.0),
+              child: Image.network(imageUrl),
+            ),
+            SizedBox(height: 8.0,),
+            Text(title,style: TextStyle(fontSize: 18.0,color: Colors.black87,fontWeight: FontWeight.w600),),
+            SizedBox(height: 8.0,),
+            Text(description,style: TextStyle(color: Colors.black54),),
 
-        ],
+          ],
+        ),
       ),
     );
   }
 }
+
